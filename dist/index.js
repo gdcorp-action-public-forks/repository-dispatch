@@ -44,7 +44,7 @@ const github = __importStar(__nccwpck_require__(5438));
 const util_1 = __nccwpck_require__(3837);
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 function hasErrorStatus(error) {
-    return typeof error.code === 'number';
+    return typeof error.status === 'number';
 }
 function getErrorMessage(error) {
     if (error instanceof Error)
@@ -643,7 +643,7 @@ class OidcClient {
                 .catch(error => {
                 throw new Error(`Failed to get ID Token. \n 
         Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
+        Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
             if (!id_token) {

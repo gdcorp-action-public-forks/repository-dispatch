@@ -9,7 +9,7 @@ A GitHub action to create a repository dispatch event.
 Dispatch an event to the current repository.
 ```yml
       - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           event-type: my-event
 ```
@@ -17,7 +17,7 @@ Dispatch an event to the current repository.
 Dispatch an event to a remote repository using a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 ```yml
       - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
           repository: username/my-repo
@@ -51,7 +51,7 @@ Here is an example setting all of the input parameters.
 
 ```yml
       - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
           repository: username/my-repo
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
           repository: ${{ matrix.repo }}
@@ -124,6 +124,32 @@ client-payload: '{"github": ${{ toJson(github) }}}'
 ```
 
 Additionally, there is a limitation on the total data size of the `client-payload`. A very large payload may result in a `client_payload is too large` error.
+
+### Multiline
+
+A multiline `client-payload` can be set directly in YAML, as in the following example.
+
+```yml
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: username/my-repo
+          event-type: my-event
+          client-payload: |-
+            {
+              "repo": {
+                "name": "${{ github.repository }}",
+                "branch": "${{ needs.build_cfg.outputs.REPO_BRANCH }}",
+                "tag": "${{ needs.build_cfg.outputs.REPO_TAG }}"
+              },
+              "deployment": {
+                "project": "${{ env.MY_PROJECT }}",
+                "container": "${{ env.MY_CONTAINER }}",
+                "deploy_msg": "${{ env.SLACK_DEPLOY_MSG }}",
+              }
+            }
+```
 
 ## License
 
